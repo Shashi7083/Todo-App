@@ -27,6 +27,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.todoapp.Model.taskList
 import com.example.todoapp.Model.tasks
 import com.example.todoapp.ui.theme.LightBlue
@@ -90,9 +91,9 @@ fun TaskView(
                                 start = 12.dp
                             )
                     )
-                    if (task.body != null) {
+                    if (task.date != null && task.date != "") {
                         Text(
-                            text = task.body,
+                            text = task.date+"-"+task.month+"-"+task.year,
                             fontWeight = FontWeight.Normal,
                             modifier = Modifier
                                 .padding(
@@ -155,7 +156,8 @@ fun TaskView(
                                         top = 2.dp,
                                         end = 5.dp,
                                         bottom = 2.dp
-                                    )
+                                    ),
+                                    fontSize = 12.sp
                                 )
 
 

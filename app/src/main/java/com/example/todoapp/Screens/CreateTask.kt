@@ -65,9 +65,11 @@ import java.util.Date
 import java.util.Locale
 
 
-@Preview
+
 @Composable
-fun CreateTask() {
+fun CreateTask(
+
+) {
 
     val context = LocalContext.current
     var title by remember { mutableStateOf("") }
@@ -88,7 +90,7 @@ fun CreateTask() {
     var currDateMonth by remember { mutableStateOf("") }
     var priority by remember { mutableStateOf(1) }
 
-    //var selectedItem by remember { mutableStateOf(CalendarDateModel(dates.get(0))) }
+
 
 
     //Set Up Calendar
@@ -107,6 +109,10 @@ fun CreateTask() {
     prevMonth = previousMonthString.substring(0, 3)
     nextMonth = nextMonthString.substring(0, 3)
 
+    val monthFormat = SimpleDateFormat("MMMM",Locale.ENGLISH)
+    val yearFormat = SimpleDateFormat("YYYY",Locale.ENGLISH)
+
+
 
 
     calendarList = ArrayList<CalendarDateModel>()
@@ -115,16 +121,27 @@ fun CreateTask() {
     val maxDaysInMonth = cal.getActualMaximum(Calendar.DAY_OF_MONTH)
     dates.clear()
     monthCalendar.set(Calendar.DAY_OF_MONTH, 1)
+
     while (dates.size < maxDaysInMonth) {
         dates.add(monthCalendar.time)
         calendarList.add(CalendarDateModel(monthCalendar.time))
         monthCalendar.add(Calendar.DAY_OF_MONTH, 1)
     }
-
+//    Log.d("test"," "+calendarList.get(0) +"\n "+)
     //End Set Up Calendar
 
-    var selectedItem by remember { mutableStateOf(calendarList.get(0)) }
+    var selectedItem by remember { mutableStateOf(
+        CalendarDateModel(Calendar.getInstance(Locale.ENGLISH).time)
+    ) }
 
+
+    var month =""
+    var year =""
+    month =selectedItem.data.month.toString()
+    year = yearFormat.format(cal.time)
+
+
+    Log.d("test",monthCalendar.time.toString())
 
     Column(
         modifier = Modifier.fillMaxSize()
@@ -177,7 +194,8 @@ fun CreateTask() {
                         modifier = Modifier
                             .clickable {
                                 cal.add(Calendar.MONTH, -1)
-
+                                month = selectedItem.data.month.toString()
+                                year = yearFormat.format(cal.time)
                                 // Get the previous and next months
                                 val previousMonth = cal.clone() as Calendar
                                 previousMonth.add(Calendar.MONTH, -1)
@@ -236,6 +254,8 @@ fun CreateTask() {
                             .clickable {
                                 cal.add(Calendar.MONTH, 1)
 
+                                month = selectedItem.data.month.toString()
+                                year = yearFormat.format(cal.time)
                                 // Get the previous and next months
                                 val previousMonth = cal.clone() as Calendar
                                 previousMonth.add(Calendar.MONTH, -1)
@@ -590,7 +610,9 @@ fun dateList(
     var dayColor = unselectedDayColor
     var backgroundColor = unselectedBackgroundColor
 
-    if (selectedItem == date) {
+
+
+    if ((selectedItem.data.date == date.data.date) && (selectedItem.data.month == date.data.month) &&(selectedItem.data.year == date.data.year)) {
         dateColor = selectedDateColor
         dayColor = selectedDayColor
         backgroundColor = selectedBackgroundColor
