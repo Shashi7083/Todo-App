@@ -32,6 +32,7 @@ class SecondActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     CreateTask(
+                        taskViewModel
                     )
                 }
             }

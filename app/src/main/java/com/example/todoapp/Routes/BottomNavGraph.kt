@@ -7,6 +7,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
+import com.example.todoapp.RoomDatabase.TaskViewModel
 import com.example.todoapp.Screens.AddTaskScreen
 import com.example.todoapp.Screens.BOTTOM_NAVIGATION_ROUTE
 import com.example.todoapp.Screens.BottomBarScreens
@@ -17,7 +18,8 @@ import com.example.todoapp.Screens.Notification
 
 fun NavGraphBuilder.BottomNavGraph(
     navController: NavHostController,
-    modifier: Modifier
+    modifier: Modifier,
+    taskViewModel: TaskViewModel
 ) {
 
 //    NavHost(
@@ -33,19 +35,19 @@ fun NavGraphBuilder.BottomNavGraph(
         composable(
             route = BottomBarScreens.Home.route
         ){
-            Home(modifier = modifier, navController = navController)
+            Home(modifier = modifier, navController = navController,taskViewModel)
         }
 
         composable(
             route = BottomBarScreens.Calendar.route
         ){
-            Calendar(modifier = modifier, navController = navController)
+            Calendar(modifier = modifier, navController = navController,taskViewModel)
         }
 
         composable(
             route = BottomBarScreens.Notification.route
         ){
-            Notification(modifier = modifier, navController = navController)
+            Notification(modifier = modifier, navController = navController,taskViewModel)
         }
 
     }

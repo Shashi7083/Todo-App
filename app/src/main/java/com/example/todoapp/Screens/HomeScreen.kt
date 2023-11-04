@@ -2,6 +2,7 @@ package com.example.todoapp.Screens
 
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
@@ -16,6 +17,7 @@ import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -26,12 +28,20 @@ import com.example.todoapp.Components.ProfileHeader
 import com.example.todoapp.Components.TaskView
 import com.example.todoapp.Components.WelcomeMessage
 import com.example.todoapp.Model.taskList
+import com.example.todoapp.RoomDatabase.TaskViewModel
 import com.example.todoapp.SecondActivity
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Home( modifier : Modifier, navController : NavHostController){
+fun Home(
+    modifier : Modifier,
+    navController : NavHostController,
+    taskViewModel: TaskViewModel
+){
+    val db_tasks = taskViewModel.tasks.collectAsState(emptyList())
+
+
 
     var addTask = remember { mutableStateOf(false) }
     val context = LocalContext.current

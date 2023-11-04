@@ -5,6 +5,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
+import com.example.todoapp.RoomDatabase.TaskViewModel
 import com.example.todoapp.Screens.AddTaskScreen
 import com.example.todoapp.Screens.BottomBarScreens
 import com.example.todoapp.Screens.CreateTask
@@ -12,7 +13,8 @@ import com.example.todoapp.Screens.OTHER_ROUTE
 
 
 fun NavGraphBuilder.FullScreenGraph(
-    navController : NavHostController
+    navController : NavHostController,
+    taskViewModel: TaskViewModel
 ){
     navigation(
         startDestination = BottomBarScreens.AddTask.route,
@@ -25,7 +27,9 @@ fun NavGraphBuilder.FullScreenGraph(
         }
 
         composable(route = BottomBarScreens.CreateTask.route){
-            CreateTask()
+            CreateTask(
+                taskViewModel
+            )
         }
     }
 }

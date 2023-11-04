@@ -10,10 +10,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.example.todoapp.RoomDatabase.TaskViewModel
 
 @Composable
 fun Notification(
-    modifier : Modifier, navController : NavHostController
+    modifier :
+    Modifier, navController : NavHostController,
+    taskViewModel: TaskViewModel
 ){
     Column(
         modifier = Modifier

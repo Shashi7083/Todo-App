@@ -52,6 +52,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.todoapp.MainActivity
 import com.example.todoapp.Model.CalendarDateModel
+import com.example.todoapp.Model.tasks
+import com.example.todoapp.RoomDatabase.TaskViewModel
 import com.example.todoapp.ui.theme.LightBlue
 import com.example.todoapp.ui.theme.LightPurple
 import com.example.todoapp.ui.theme.Orange
@@ -65,10 +67,9 @@ import java.util.Date
 import java.util.Locale
 
 
-
 @Composable
 fun CreateTask(
-
+    taskViewModel: TaskViewModel
 ) {
 
     val context = LocalContext.current
@@ -91,8 +92,6 @@ fun CreateTask(
     var priority by remember { mutableStateOf(1) }
 
 
-
-
     //Set Up Calendar
 
     // Get the previous and next months
@@ -109,8 +108,8 @@ fun CreateTask(
     prevMonth = previousMonthString.substring(0, 3)
     nextMonth = nextMonthString.substring(0, 3)
 
-    val monthFormat = SimpleDateFormat("MMMM",Locale.ENGLISH)
-    val yearFormat = SimpleDateFormat("YYYY",Locale.ENGLISH)
+    val monthFormat = SimpleDateFormat("MMMM", Locale.ENGLISH)
+    val yearFormat = SimpleDateFormat("YYYY", Locale.ENGLISH)
 
 
 
@@ -130,18 +129,20 @@ fun CreateTask(
 //    Log.d("test"," "+calendarList.get(0) +"\n "+)
     //End Set Up Calendar
 
-    var selectedItem by remember { mutableStateOf(
-        CalendarDateModel(Calendar.getInstance(Locale.ENGLISH).time)
-    ) }
+    var selectedItem by remember {
+        mutableStateOf(
+            CalendarDateModel(Calendar.getInstance(Locale.ENGLISH).time)
+        )
+    }
 
 
-    var month =""
-    var year =""
-    month =selectedItem.data.month.toString()
+    var month = ""
+    var year = ""
+    month = selectedItem.data.month.toString()
     year = yearFormat.format(cal.time)
 
 
-    Log.d("test",monthCalendar.time.toString())
+    Log.d("test", monthCalendar.time.toString())
 
     Column(
         modifier = Modifier.fillMaxSize()
@@ -470,13 +471,12 @@ fun CreateTask(
 
                     ) {
 
-                            Text(
-                                text = "High",
-                                fontSize = 18.sp,
-                                color = Color.Red,
-                                modifier = Modifier.padding(25.dp, 15.dp, 25.dp, 15.dp)
-                            )
-
+                        Text(
+                            text = "High",
+                            fontSize = 18.sp,
+                            color = Color.Red,
+                            modifier = Modifier.padding(25.dp, 15.dp, 25.dp, 15.dp)
+                        )
 
 
                     }
@@ -495,12 +495,12 @@ fun CreateTask(
 
                     ) {
 
-                            Text(
-                                text = "Midium",
-                                fontSize = 18.sp,
-                                color = Orange,
-                                modifier = Modifier.padding(25.dp, 15.dp, 25.dp, 15.dp)
-                            )
+                        Text(
+                            text = "Midium",
+                            fontSize = 18.sp,
+                            color = Orange,
+                            modifier = Modifier.padding(25.dp, 15.dp, 25.dp, 15.dp)
+                        )
 
                     }
                     Box(
@@ -518,12 +518,12 @@ fun CreateTask(
 
                     ) {
 
-                            Text(
-                                text = "Low",
-                                fontSize = 18.sp,
-                                color = Color.Green,
-                                modifier = Modifier.padding(25.dp, 15.dp, 25.dp, 15.dp)
-                            )
+                        Text(
+                            text = "Low",
+                            fontSize = 18.sp,
+                            color = Color.Green,
+                            modifier = Modifier.padding(25.dp, 15.dp, 25.dp, 15.dp)
+                        )
 
 
                     }
@@ -539,7 +539,25 @@ fun CreateTask(
                     Button(
                         elevation = ButtonDefaults.buttonElevation(2.dp),
                         onClick = {
+                            val task = tasks(
+                                title = title,
+                                body = body,
+                                startTime = startTime,
+                                endTime = endTime,
+                                date = selectedItem.calendarDate,
+                                priority = priority,
+                                day = selectedItem.calendarDay,
+                                month = month,
+                                year = year
+                            )
 
+                            taskViewModel.insertTask(task)
+                            title = ""
+                            body = ""
+                            startTime=""
+                            endTime=""
+                            priority = 1
+                            Toast.makeText(context, "Task Added Successfully", Toast.LENGTH_SHORT).show()
                         },
                         colors = ButtonDefaults.buttonColors()
                     ) {
@@ -612,7 +630,7 @@ fun dateList(
 
 
 
-    if ((selectedItem.data.date == date.data.date) && (selectedItem.data.month == date.data.month) &&(selectedItem.data.year == date.data.year)) {
+    if ((selectedItem.data.date == date.data.date) && (selectedItem.data.month == date.data.month) && (selectedItem.data.year == date.data.year)) {
         dateColor = selectedDateColor
         dayColor = selectedDayColor
         backgroundColor = selectedBackgroundColor

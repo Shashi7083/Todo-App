@@ -30,8 +30,10 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.rememberNavController
 import com.example.todoapp.Components.ProfileHeader
+import com.example.todoapp.RoomDatabase.TaskViewModel
 import com.example.todoapp.Screens.BottomBarScreens
 import com.example.todoapp.Routes.BottomNavGraph
 import com.example.todoapp.Routes.NavGraph
@@ -42,6 +44,9 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
+
+            val taskViewModel : TaskViewModel = viewModel()
+
             val navController = rememberNavController()
             var selectedScreen by remember { mutableStateOf(1) }
 
@@ -62,7 +67,8 @@ class MainActivity : ComponentActivity() {
                 Scaffold(
                     topBar = {
                         TopAppBar(
-                            modifier = Modifier.fillMaxWidth()
+                            modifier = Modifier
+                                .fillMaxWidth()
                                 .height(60.dp),
                             backgroundColor = Color.White
                         ) {
@@ -133,7 +139,7 @@ class MainActivity : ComponentActivity() {
                 ) {
 //                    BottomNavGraph(
 //                        navController = navController, modifier = Modifier.padding(it))
-                    NavGraph(navController = navController, modifier = Modifier.padding(it))
+                    NavGraph(navController = navController, modifier = Modifier.padding(it),taskViewModel)
                 }
 
             }

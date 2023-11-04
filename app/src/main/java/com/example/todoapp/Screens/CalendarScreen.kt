@@ -34,13 +34,16 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.*
 import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavHostController
+import com.example.todoapp.RoomDatabase.TaskViewModel
 import com.example.todoapp.ui.theme.gray
 import com.example.todoapp.ui.theme.redOrange
 import java.util.*
 
 @Composable
 fun Calendar(
-    modifier : Modifier, navController : NavHostController
+    modifier : Modifier,
+    navController : NavHostController,
+    taskViewModel: TaskViewModel
 ){
 
     Column(
