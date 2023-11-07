@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
+import androidx.room.Update
 import com.example.todoapp.Model.tasks
 import kotlinx.coroutines.flow.Flow
 
@@ -18,4 +19,7 @@ interface TaskDao {
 
     @Delete
     suspend fun deleteTask(tasks: tasks)
+
+    @Update
+    suspend fun updateTask(task : tasks)
 }

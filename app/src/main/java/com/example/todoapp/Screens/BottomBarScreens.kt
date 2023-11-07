@@ -33,4 +33,9 @@ sealed class BottomBarScreens(
         route = "create_task_screen",
         title = "Create Task"
     )
+
+    object TaskDetailScreen : BottomBarScreens(
+        route = "detail_screen",
+        title = "TaskDetailScreen"
+    )
 }

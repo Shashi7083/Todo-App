@@ -1,8 +1,10 @@
 package com.example.todoapp.Components
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -25,6 +27,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -37,9 +40,19 @@ import com.example.todoapp.ui.theme.LightPurple
 import com.example.todoapp.ui.theme.Orange
 import com.example.todoapp.ui.theme.priority2
 
+@Preview
+@Composable
+fun Preview(){
+    TaskView(task = taskList.get(0)){
+
+    }
+}
+
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun TaskView(
-    task: tasks
+    task: tasks,
+    onClick:(tasks) -> Unit
 ) {
 
     val taskColor = listOf<Color>(LightPurple, LightBlue, LightGreen).random()
@@ -49,7 +62,7 @@ fun TaskView(
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
-            text = "${task.startTime}\nAM",
+            text = "${task.startTime.subSequence(0,task.startTime.length -3)}\n${task.startTime.subSequence(task.startTime.length-2,task.startTime.length)}",
             fontFamily = FontFamily.Default,
             fontWeight = FontWeight.Bold,
             textAlign = TextAlign.Center
@@ -79,12 +92,19 @@ fun TaskView(
                     modifier = Modifier
                         .clip(RoundedCornerShape(14.dp))
                         .background(taskColor)
-                        .weight(0.9f),
+                        .weight(0.9f)
+                        .combinedClickable(
+                            onClick = {
+                                      onClick(task)
+                            },
+                            onLongClick = { }
+                        ),
                     verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     Text(
                         text = "${task.title}",
                         fontWeight = FontWeight.Bold,
+                        maxLines = 1,
                         modifier = Modifier
                             .padding(
                                 top = 12.dp,
@@ -99,7 +119,8 @@ fun TaskView(
                                 .padding(
                                     start = 12.dp
                                 ),
-                            color = Color.Gray
+                            color = Color.Gray,
+                            maxLines = 1
                         )
                     }
 
@@ -112,6 +133,7 @@ fun TaskView(
                         Text(
                             text = "${task.startTime} - ${task.endTime}",
                             fontWeight = FontWeight.Normal,
+                            fontSize = 14.sp,
                             modifier = Modifier
                                 .padding(
                                     start = 12.dp,
@@ -157,7 +179,8 @@ fun TaskView(
                                         end = 5.dp,
                                         bottom = 2.dp
                                     ),
-                                    fontSize = 12.sp
+                                    fontSize = 12.sp,
+                                    maxLines = 1,
                                 )
 
 

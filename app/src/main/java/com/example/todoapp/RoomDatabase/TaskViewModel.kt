@@ -25,4 +25,10 @@ class TaskViewModel(application: Application) : AndroidViewModel(application) {
             taskDao.deleteTask(task)
         }
     }
+
+    fun updateTask(task : tasks){
+        viewModelScope.launch {
+            taskDao.updateTask(task)
+        }
+    }
 }

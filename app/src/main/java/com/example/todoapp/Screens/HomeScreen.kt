@@ -28,6 +28,7 @@ import com.example.todoapp.Components.ProfileHeader
 import com.example.todoapp.Components.TaskView
 import com.example.todoapp.Components.WelcomeMessage
 import com.example.todoapp.Model.taskList
+import com.example.todoapp.Model.tasks
 import com.example.todoapp.RoomDatabase.TaskViewModel
 import com.example.todoapp.SecondActivity
 
@@ -40,6 +41,8 @@ fun Home(
     taskViewModel: TaskViewModel
 ){
     val db_tasks = taskViewModel.tasks.collectAsState(emptyList())
+//    Log.d("test","${db_tasks.value} \n\n\n")
+//    Log.d("test", "$taskList \n\n\n")
 
 
 
@@ -69,8 +72,15 @@ fun Home(
                 Spacer(modifier = Modifier.height(30.dp))
             }
 
-            items(taskList) { task ->
-                TaskView(task = task)
+            items(db_tasks.value) { task ->
+                TaskView(task = task){
+
+                   val intent  = Intent(context,SecondActivity::class.java)
+                    intent.putExtra("details",1)
+                    intent.putExtra("task_data",it)
+
+                    context.startActivity(intent)
+                }
                 Spacer(modifier = Modifier.height(16.dp))
             }
         }
@@ -91,8 +101,9 @@ fun fabAdd(
 //                inclusive = true
 //            }
 //        }
-
-     context.startActivity(Intent(context,SecondActivity::class.java))
+        val intent = Intent(context , SecondActivity::class.java)
+        intent.putExtra("details",2)
+     context.startActivity(intent)
 
     }) {
         Icon(imageVector = Icons.Filled.Add, contentDescription = null)

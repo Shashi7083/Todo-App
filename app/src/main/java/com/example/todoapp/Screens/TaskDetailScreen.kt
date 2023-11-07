@@ -1,6 +1,9 @@
 package com.example.todoapp.Screens
 
 import android.app.Activity
+import android.app.Application
+import android.content.Intent
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -20,6 +23,9 @@ import androidx.compose.foundation.magnifier
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.KeyboardArrowDown
@@ -36,45 +42,55 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.datasource.LoremIpsum
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.todoapp.MainActivity
+import com.example.todoapp.Model.taskList
 import com.example.todoapp.Model.tasks
+import com.example.todoapp.RoomDatabase.TaskViewModel
 import com.example.todoapp.ui.theme.LightBlue
 import com.example.todoapp.ui.theme.Orange
 import com.example.todoapp.ui.theme.priority2
 import com.example.todoapp.ui.theme.unselectedDate
 
 
+
+
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun TaskDetailScreen(
-    task : tasks
+    task : tasks,
+    taskViewModel: TaskViewModel
 ) {
     val context = LocalContext.current
 
+    var id by remember{ mutableStateOf(task.id) }
     var title by remember { mutableStateOf("${task.title}") }
     var isEdit by remember { mutableStateOf(false) }
-    var date by remember { mutableStateOf("31 Tuesday, 2021") }
-    var time by remember { mutableStateOf("6:00 PM-9:00 PM") }
-    var description by remember {
-        mutableStateOf(
-            "Press \"L\" if you like it. I am available for new project. Send me your “Hello” here,\n" +
-                    "rasel06103@gmail.com\n" +
-                    "\n" +
-                    "Take Care & Love from Md.Al Amin\n" +
-                    "************\n" +
-                    "Behance | Dribbble | Instagram | Upwork\n" +
-                    "Thanks for watching."
-        )
-    }
+    var date by remember { mutableStateOf("${task.date}") }
+    var startTime by remember { mutableStateOf("${task.startTime}") }
+    var endTime by remember { mutableStateOf("${task.endTime}") }
+    var description by remember { mutableStateOf("${task.body}") }
+    var day by remember{ mutableStateOf("${task.day}") }
+    var year by remember { mutableStateOf("${task.year}") }
+    var month by remember { mutableStateOf("${task.month}") }
+
+    val keyboardController = LocalSoftwareKeyboardController.current
+
+
 
     val view = LocalView.current
     val window = (view.context as Activity).window
@@ -101,14 +117,20 @@ fun TaskDetailScreen(
             ) {
                 Icon(
                     imageVector = Icons.Filled.ArrowBack,
-                    contentDescription = "")
+                    contentDescription = "",
+                    modifier = Modifier
+                        .clickable {
+                            context.startActivity(Intent(context,MainActivity::class.java))
+                        }
+                )
 
                 Icon(
                     imageVector = Icons.Outlined.EditNote,
                     contentDescription = "",
-                    modifier = Modifier.clickable {
-                        isEdit = !isEdit
-                    }
+                    modifier = Modifier
+                        .clickable {
+                            isEdit = !isEdit
+                        }
                         .size(40.dp)
                 )
             }
@@ -133,7 +155,15 @@ fun TaskDetailScreen(
                     fontSize = 23.sp,
                     fontWeight = FontWeight.Bold
                 ),
-                maxLines = 2
+                maxLines = 2,
+                keyboardOptions = KeyboardOptions(
+                   imeAction = ImeAction.Done
+                ),
+                keyboardActions = KeyboardActions(
+                    onDone = {
+                        keyboardController?.hide()
+                    }
+                )
             )
 
             Row(
@@ -145,14 +175,14 @@ fun TaskDetailScreen(
             ) {
 
                 Text(
-                    text = "Jan 2024",
+                    text = getMonthFromInt(month.toInt())+" $year",
                     color = unselectedDate
                 )
-                Icon(
-                    imageVector = Icons.Filled.KeyboardArrowDown,
-                    contentDescription = "",
-                    tint = unselectedDate
-                )
+//                Icon(
+//                    imageVector = Icons.Filled.KeyboardArrowDown,
+//                    contentDescription = "",
+//                    tint = unselectedDate
+//                )
             }
             Spacer(modifier = Modifier.height(30.dp))
         }
@@ -173,16 +203,91 @@ fun TaskDetailScreen(
                         modifier = Modifier.padding(top = 20.dp)
                     ) {
                         Text(text = "Date", color = Color.Gray)
-                        BasicTextField(
-                            value = date,
-                            onValueChange = {
-                                date = it
-                            },
-                            readOnly = !isEdit,
-                            textStyle = TextStyle(
-                                fontWeight = FontWeight.Bold
+//                        BasicTextField(
+//                            value = date,
+//                            onValueChange = {
+//                                date = it
+//                            },
+//                            readOnly = !isEdit,
+//                            textStyle = TextStyle(
+//                                fontWeight = FontWeight.Bold
+//                            )
+//                        )
+
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            BasicTextField(
+                                value = date,
+                                onValueChange = {
+                                    if(it.length <=2) {
+                                        date = it
+                                        if(it.isNotEmpty()){
+                                            var i = it.toInt()
+                                            if(i > 31){
+                                                date = task.date
+                                            }
+                                        }
+
+                                    }
+                                },
+                                readOnly = !isEdit,
+                                textStyle = TextStyle(
+                                    fontWeight = FontWeight.Bold
+                                ),
+                                modifier = Modifier.width(20.dp),
+                                keyboardOptions = KeyboardOptions(
+                                    keyboardType = KeyboardType.Number,
+                                    imeAction = ImeAction.Done
+                                ),
+                                keyboardActions = KeyboardActions(
+                                    onDone = {
+                                        keyboardController?.hide()
+                                    }
+                                )
                             )
-                        )
+
+                            BasicTextField(
+                                value = day,
+                                onValueChange = {
+                                    if(it.length <=3) {
+                                        day = it
+                                    }
+                                },
+                                readOnly = !isEdit,
+                                textStyle = TextStyle(
+                                    fontWeight = FontWeight.Bold
+                                ),
+                                modifier = Modifier.width(30.dp),
+                                keyboardOptions = KeyboardOptions(
+                                    keyboardType = KeyboardType.Text
+                                )
+                            )
+                            Text(text = ",")
+                            BasicTextField(
+                                value = year,
+                                onValueChange = {
+                                    if(it.length <=4) {
+                                        year = it
+
+                                    }
+                                },
+                                readOnly = !isEdit,
+                                textStyle = TextStyle(
+                                    fontWeight = FontWeight.Bold
+                                ),
+                                modifier = Modifier.width(75.dp),
+                                keyboardOptions = KeyboardOptions(
+                                    keyboardType = KeyboardType.Number,
+                                    imeAction = ImeAction.Done
+                                ),
+                                keyboardActions = KeyboardActions(
+                                    onDone = {
+                                        keyboardController?.hide()
+                                    }
+                                )
+                            )
+                        }
                     }
 
                     Divider(
@@ -197,16 +302,54 @@ fun TaskDetailScreen(
                         modifier = Modifier.padding(top = 20.dp, end = 20.dp)
                     ) {
                         Text(text = "Time", color = Color.Gray)
+
+                        Row {
+
                         BasicTextField(
-                            value = time,
+                            value = startTime,
                             onValueChange = {
-                                time = it
+                                if(it.length <=9) {
+                                    startTime = it
+                                }
                             },
                             readOnly = !isEdit,
                             textStyle = TextStyle(
                                 fontWeight = FontWeight.Bold
+                            ),
+                            modifier = Modifier.width(65.dp),
+                            keyboardOptions = KeyboardOptions(
+                                imeAction = ImeAction.Done
+                            ),
+                            keyboardActions = KeyboardActions(
+                                onDone = {
+                                    keyboardController?.hide()
+                                }
                             )
                         )
+                        Text(text = "-")
+                            BasicTextField(
+                                value = endTime,
+                                onValueChange = {
+                                    if(it.length <=9) {
+                                        endTime = it
+                                    }
+                                },
+                                readOnly = !isEdit,
+                                textStyle = TextStyle(
+                                    fontWeight = FontWeight.Bold
+                                ),
+                                modifier = Modifier.width(65.dp),
+                                maxLines = 1,
+                                keyboardOptions = KeyboardOptions(
+                                    imeAction = ImeAction.Done
+                                ),
+                                keyboardActions = KeyboardActions(
+                                    onDone = {
+                                        keyboardController?.hide()
+                                    }
+                                )
+                            )
+                    }
                     }
 
                 }
@@ -247,10 +390,19 @@ fun TaskDetailScreen(
                     modifier = Modifier
                         .padding(start = 20.dp, top = 20.dp, end = 20.dp)
                         .fillMaxHeight(0.6f)
+                        .fillMaxWidth()
                         .background(Color.LightGray.copy(0.1f), RoundedCornerShape(5.dp)),
                     textStyle = TextStyle(
                         color = Color.Gray,
                         fontSize = 15.sp
+                    ),
+                    keyboardOptions = KeyboardOptions(
+                        imeAction = ImeAction.Done
+                    ),
+                    keyboardActions = KeyboardActions(
+                        onDone = {
+                            keyboardController?.hide()
+                        }
                     )
                 )
             }
@@ -287,6 +439,14 @@ fun TaskDetailScreen(
                 Box(
                     modifier = Modifier
                         .background(color = backgroundColor, shape = CircleShape)
+                        .clickable {
+                            if (isEdit) {
+                                priority += 1
+                                if (priority > 2) {
+                                    priority = 0
+                                }
+                            }
+                        }
                 ) {
                     Text(
                         text = priorityText,
@@ -297,6 +457,7 @@ fun TaskDetailScreen(
                             top = 10.dp,
                             bottom = 10.dp
                         )
+
                     )
                 }
             }
@@ -317,13 +478,39 @@ fun TaskDetailScreen(
                         fontSize = 15.sp,
                         modifier = Modifier.clickable {
                             isEdit = !isEdit
+
+                            title = "${task.title}"
+
+                             date ="${task.date}"
+                             startTime ="${task.startTime}"
+                             endTime ="${task.endTime}"
+                             description ="${task.body}"
+                             day ="${task.day}"
+                             year ="${task.year}"
+                             month ="${task.month}"
+                            priority = task.priority
+
                         }
                     )
 
                     Spacer(modifier = Modifier.width(30.dp))
 
                     Button(onClick = {
+                            var updatedTask : tasks = tasks(
+                                id =id,
+                               title =  title,
+                               body =  description,
+                                startTime = startTime,
+                                endTime = endTime,
+                                date = date,
+                                priority = priority,
+                                day = day,
+                                month  = month,
+                                year = year
+                            )
 
+                        taskViewModel.updateTask(updatedTask)
+                        Toast.makeText(context, "Task Updated", Toast.LENGTH_SHORT).show()
                     },
                         colors = ButtonDefaults.buttonColors(Color.Blue)
                     ) {
@@ -335,15 +522,20 @@ fun TaskDetailScreen(
     }
 }
 
-@Preview
-@Composable
-fun preview() {
-    TaskDetailScreen(tasks(
-        1,
-        "Read email and reply to everyone",
-        "Check all the email of inbox and reply to necessary one",
-        "6:00PM",
-        "7:00PM",
-        "31"
-    ))
+fun getMonthFromInt(month: Int): String {
+    return when (month) {
+        1 -> "Jan"
+        2 -> "Feb"
+        3 -> "Mar"
+        4 -> "Apr"
+        5 -> "May"
+        6 -> "Jun"
+        7 -> "Jul"
+        8 -> "Aug"
+        9 -> "Sep"
+        10 -> "Oct"
+        11 -> "Nov"
+        12 -> "Dec"
+        else -> ""
+    }
 }

@@ -3,9 +3,12 @@ package com.example.todoapp.Model
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import android.os.Parcelable
+import java.io.Serializable
+
 
 @Entity(tableName = "tasks")
-data class tasks(
+data class tasks (
     @PrimaryKey(autoGenerate = true)
     val id : Int =0,
     val title : String,
@@ -17,7 +20,9 @@ data class tasks(
     val day : String = "",
     val month : String ="",
     val year : String =""
-)
+) : Serializable
+
+
 
 val taskList = listOf(
     tasks(
@@ -26,7 +31,11 @@ val taskList = listOf(
         "Try to go to bed early ",
         "03:00",
         "12:30",
-        priority = 1
+        date = "01",
+        priority = 1,
+        day = "Mon",
+        month = "January",
+        year = "2024"
     ),
     tasks(
         2,

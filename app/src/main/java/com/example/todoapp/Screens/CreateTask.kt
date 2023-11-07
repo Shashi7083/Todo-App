@@ -1,9 +1,10 @@
 package com.example.todoapp.Screens
 
+import android.app.TimePickerDialog
+import android.content.Context
 import android.content.Intent
 import android.util.Log
 import android.widget.Toast
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -22,10 +23,8 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.ButtonElevation
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Album
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.material.icons.filled.ArrowForwardIos
@@ -47,7 +46,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.todoapp.MainActivity
@@ -55,7 +53,6 @@ import com.example.todoapp.Model.CalendarDateModel
 import com.example.todoapp.Model.tasks
 import com.example.todoapp.RoomDatabase.TaskViewModel
 import com.example.todoapp.ui.theme.LightBlue
-import com.example.todoapp.ui.theme.LightPurple
 import com.example.todoapp.ui.theme.Orange
 import com.example.todoapp.ui.theme.gray
 import com.example.todoapp.ui.theme.redOrange
@@ -141,6 +138,75 @@ fun CreateTask(
     month = selectedItem.data.month.toString()
     year = yearFormat.format(cal.time)
 
+
+    val isSystem24Hour = android.text.format.DateFormat.is24HourFormat(context)
+
+    val calendar = Calendar.getInstance()
+    val hour = calendar[Calendar.HOUR_OF_DAY]
+    val minute = calendar[Calendar.MINUTE]
+
+
+    val startTimePicker = TimePickerDialog(
+        context,
+        {_,h:Int, m:Int->
+
+            var hour = h
+            var minute = m
+
+            var amPm = ""
+            if(!isSystem24Hour){
+                if(hour <12){
+                   amPm= " AM"
+
+                }
+                else{
+                   amPm= " PM"
+                    hour -= 12
+                }
+            }else{
+                if(hour < 12){
+                    amPm = " AM"
+                }else{
+                    amPm = " PM"
+                }
+            }
+            var hourStr :String =if(hour/10 <=0)"0$hour" else "$hour"
+            var minuteStr :String =if(minute/10 <=0)"0$minute" else "$minute"
+            startTime = "$hourStr:$minuteStr $amPm"
+
+        },hour,minute,isSystem24Hour
+    )
+    val endTimePicker = TimePickerDialog(
+        context,
+        { _, h: Int, m: Int ->
+
+            var hour = h
+            var minute = m
+
+            var amPm = ""
+            if(!isSystem24Hour){
+                if(hour <12){
+                    amPm= " AM"
+
+                }
+                else{
+                    amPm= " PM"
+                    hour -= 12
+                }
+            }else{
+                if(hour < 12){
+                    amPm = " AM"
+                }else{
+                    amPm = " PM"
+                }
+            }
+            var hourStr :String =if(hour/10 <=0)"0$hour" else "$hour"
+            var minuteStr :String =if(minute/10 <=0)"0$minute" else "$minute"
+            endTime = "$hourStr:$minuteStr $amPm"
+
+
+        },hour,minute,isSystem24Hour
+    )
 
     Log.d("test", monthCalendar.time.toString())
 
@@ -340,7 +406,10 @@ fun CreateTask(
                         title = it
                     },
                     label = {
-                        Text(text = "Title")
+                        Text(
+                            text = "Title",
+                            color = Color.LightGray
+                        )
                     },
                     modifier = Modifier
                         .fillMaxWidth()
@@ -355,7 +424,10 @@ fun CreateTask(
                         body = it
                     },
                     label = {
-                        Text(text = "Description")
+                        Text(
+                            text = "Description",
+                            color = Color.LightGray
+                        )
                     },
                     modifier = Modifier
                         .fillMaxWidth()
@@ -377,15 +449,22 @@ fun CreateTask(
                         onValueChange = {
                             startTime = it
                         },
+                        enabled = false,
                         placeholder = {
                             Text(text = "00:00 AM")
                         },
                         label = {
-                            Text(text = "Start time")
+                            Text(
+                                text = "Start time",
+                                color = Color.LightGray
+                            )
                         },
                         modifier = Modifier
                             .padding(0.dp, 0.dp, 5.dp, 0.dp)
-                            .weight(0.5f),
+                            .weight(0.5f)
+                            .clickable {
+                                startTimePicker.show()
+                            },
                         shape = RoundedCornerShape(40.dp),
                         trailingIcon = {
                             Box(
@@ -408,15 +487,22 @@ fun CreateTask(
                         onValueChange = {
                             endTime = it
                         },
+                        enabled = false,
                         placeholder = {
                             Text(text = "00:00 AM")
                         },
                         label = {
-                            Text(text = "End time")
+                            Text(
+                                text = "End time",
+                                color = Color.LightGray)
                         },
                         modifier = Modifier
                             .padding(5.dp, 0.dp, 0.dp, 0.dp)
-                            .weight(0.5f), shape = RoundedCornerShape(40.dp),
+                            .weight(0.5f)
+                            .clickable {
+                                endTimePicker.show()
+                            },
+                        shape = RoundedCornerShape(40.dp),
                         trailingIcon = {
                             Box(
                                 modifier = Modifier
@@ -551,13 +637,19 @@ fun CreateTask(
                                 year = year
                             )
 
-                            taskViewModel.insertTask(task)
-                            title = ""
-                            body = ""
-                            startTime=""
-                            endTime=""
-                            priority = 1
-                            Toast.makeText(context, "Task Added Successfully", Toast.LENGTH_SHORT).show()
+
+                            if(!title.equals("") && !startTime.equals("") && !endTime.equals("")) {
+                                taskViewModel.insertTask(task)
+                                title = ""
+                                body = ""
+                                startTime=""
+                                endTime=""
+                                priority = 1
+                                Toast.makeText(context, "Task Added Successfully", Toast.LENGTH_SHORT).show()
+                            }else{
+                                Toast.makeText(context, "Field Cannot be Empty", Toast.LENGTH_SHORT).show()
+                            }
+
                         },
                         colors = ButtonDefaults.buttonColors()
                     ) {

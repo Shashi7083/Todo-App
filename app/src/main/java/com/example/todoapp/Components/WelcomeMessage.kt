@@ -27,9 +27,7 @@ fun WelcomeMessage() {
     val calendar = Calendar.getInstance()
     val dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK)
 
-    var listSize by remember {
-        mutableStateOf(taskList.size)
-    }
+
 
     when (dayOfWeek) {
         1 -> day = "Sunday"
@@ -52,7 +50,7 @@ fun WelcomeMessage() {
         )
 
         Text(
-            text = "$listSize tasks for today $day",
+            text = "Complete your $day tasks.",
             fontFamily = FontFamily.Default,
             fontWeight = FontWeight.Normal,
             fontSize = 18.sp,
