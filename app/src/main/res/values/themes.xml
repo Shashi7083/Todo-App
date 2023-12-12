@@ -7,7 +7,7 @@
     </style>
 
     <style name="SecocndActivity" parent="android:Theme.Material.Light.NoActionBar">
-        <item name ="android:statusBarColor">@color/LightBlue</item>
+        <item name="android:statusBarColor">@color/LightBlue</item>
         <item name="android:windowLightStatusBar">true</item>
     </style>
 

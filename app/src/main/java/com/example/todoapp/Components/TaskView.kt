@@ -4,7 +4,9 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -17,7 +19,12 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Divider
+import androidx.compose.material3.Icon
+import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -33,6 +40,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.todoapp.Model.taskList
 import com.example.todoapp.Model.tasks
+import com.example.todoapp.Screens.BottomBarScreens
 import com.example.todoapp.ui.theme.LightBlue
 import com.example.todoapp.ui.theme.LightGray
 import com.example.todoapp.ui.theme.LightGreen
@@ -40,19 +48,12 @@ import com.example.todoapp.ui.theme.LightPurple
 import com.example.todoapp.ui.theme.Orange
 import com.example.todoapp.ui.theme.priority2
 
-@Preview
-@Composable
-fun Preview(){
-    TaskView(task = taskList.get(0)){
-
-    }
-}
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun TaskView(
     task: tasks,
-    onClick:(tasks) -> Unit
+    onClick:(tasks , ClickType) -> Unit
 ) {
 
     val taskColor = listOf<Color>(LightPurple, LightBlue, LightGreen).random()
@@ -95,22 +96,43 @@ fun TaskView(
                         .weight(0.9f)
                         .combinedClickable(
                             onClick = {
-                                      onClick(task)
+                                      onClick(task, ClickType.ViewClick)
                             },
                             onLongClick = { }
                         ),
                     verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
-                    Text(
-                        text = "${task.title}",
-                        fontWeight = FontWeight.Bold,
-                        maxLines = 1,
-                        modifier = Modifier
-                            .padding(
-                                top = 12.dp,
-                                start = 12.dp
-                            )
-                    )
+
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ){
+                        Text(
+                            text = "${task.title}",
+                            fontWeight = FontWeight.Bold,
+                            maxLines = 1,
+                            modifier = Modifier
+                                .padding(
+                                    top = 12.dp,
+                                    start = 12.dp
+                                )
+                        )
+
+                        Icon(
+                            imageVector = Icons.Filled.Delete,
+                            contentDescription = "Delete",
+                            modifier = Modifier
+                                .clickable {
+                                    onClick(task,ClickType.DeleteClick)
+                                }
+                                .padding(end=10.dp),
+                            tint = Color.LightGray
+
+                        )
+
+                    }
+
                     if (task.date != null && task.date != "") {
                         Text(
                             text = task.date+"-"+task.month+"-"+task.year,
@@ -204,3 +226,7 @@ fun TaskView(
     }
 }
 
+enum class ClickType{
+    ViewClick,
+    DeleteClick
+}

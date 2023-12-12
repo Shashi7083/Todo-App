@@ -67,10 +67,20 @@ dependencies {
 
 //    implementation("androidx.room:room-ktx:2.6.0")
 //    kapt("androidx.room:room-compiler:2.6.0")
+//
+//    implementation("io.github.boguszpawlowski.composecalendar:composecalendar:1.1.0")
+//
+//    // separate artifact with utilities for working with kotlinx-datetime
+//    implementation("io.github.boguszpawlowski.composecalendar:kotlinx-datetime:1.1.0")
 
+    implementation("com.himanshoe:kalendar:1.3.2")
+    implementation("com.himanshoe:kalendar-endlos:1.3.2")
+//    implementation("com.github.hi-manshu:kalendar:1.0.1")
 
 
     implementation("androidx.room:room-runtime:2.5.0")
+    implementation(platform("androidx.compose:compose-bom:2023.03.00"))
+    androidTestImplementation(platform("androidx.compose:compose-bom:2023.03.00"))
 
     kapt("androidx.room:room-compiler:2.5.0")
 

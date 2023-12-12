@@ -633,7 +633,7 @@ fun CreateTask(
                                 date = selectedItem.calendarDate,
                                 priority = priority,
                                 day = selectedItem.calendarDay,
-                                month = month,
+                                month = "${month.toInt()+1}",
                                 year = year
                             )
 
