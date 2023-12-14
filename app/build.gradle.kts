@@ -89,6 +89,13 @@ dependencies {
     testImplementation("androidx.room:room-testing:2.5.0")
 
 
+    //koin
+
+   
+
+    implementation("io.insert-koin:koin-android:3.4.0")
+    implementation("io.insert-koin:koin-androidx-compose:3.4.4")
+
     implementation("androidx.compose.material:material-icons-extended:1.5.3")
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("com.google.android.material:material:1.10.0")

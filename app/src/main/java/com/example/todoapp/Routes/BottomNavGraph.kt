@@ -1,19 +1,16 @@
 package com.example.todoapp.Routes
 
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.example.todoapp.RoomDatabase.TaskViewModel
-import com.example.todoapp.Screens.AddTaskScreen
 import com.example.todoapp.Screens.BOTTOM_NAVIGATION_ROUTE
 import com.example.todoapp.Screens.BottomBarScreens
 import com.example.todoapp.Screens.Calendar
 import com.example.todoapp.Screens.Home
-import com.example.todoapp.Screens.Notification
+import com.example.todoapp.Screens.QuickListTaskScreen
 
 
 fun NavGraphBuilder.BottomNavGraph(
@@ -45,9 +42,9 @@ fun NavGraphBuilder.BottomNavGraph(
         }
 
         composable(
-            route = BottomBarScreens.Notification.route
+            route = BottomBarScreens.QuickListTask.route
         ){
-            Notification(modifier = modifier, navController = navController,taskViewModel)
+        QuickListTaskScreen(modifier = modifier, navController = navController)
         }
 
     }

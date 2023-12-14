@@ -27,3 +27,8 @@ val unselectedDate = Color(0xFFEC754B)
 
 val unselectedDay = Color(0xFFBFBFC8)
 val priority2 = Color(0xFF1A5026)
+
+
+val Dark200 = Color(0xff44475a)
+val Dark500 = Color(0xff2d2f3c)
+

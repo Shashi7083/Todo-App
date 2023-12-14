@@ -19,7 +19,7 @@ sealed class BottomBarScreens(
         title = "bottom_Calendar"
     )
 
-    object Notification : BottomBarScreens(
+    object QuickListTask : BottomBarScreens(
         route = "bottom_notification_screen",
         title = "Notification"
     )

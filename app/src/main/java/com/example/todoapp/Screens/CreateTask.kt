@@ -21,6 +21,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.OutlinedTextField
@@ -36,9 +37,11 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -58,6 +61,7 @@ import com.example.todoapp.ui.theme.gray
 import com.example.todoapp.ui.theme.redOrange
 
 import com.example.todoapp.ui.theme.unselectedDate
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
@@ -692,12 +696,13 @@ fun CalendarListView(
             .fillMaxWidth()
             .padding(0.dp, 0.dp, 0.dp, 5.dp)
     ) {
-        items(calendarList) {
+        items(calendarList, key = {it.data}) {
             dateList(
                 date = it,
                 selectedItem = selectedItem,
                 selectedItemDetails = selectedItemDetails
             )
+
 
         }
     }

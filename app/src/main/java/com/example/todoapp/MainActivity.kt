@@ -1,6 +1,7 @@
 package com.example.todoapp
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
@@ -17,6 +18,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CalendarMonth
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Notifications
+import androidx.compose.material.icons.filled.Task
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
@@ -31,11 +33,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.todoapp.Components.ProfileHeader
 import com.example.todoapp.RoomDatabase.TaskViewModel
 import com.example.todoapp.Screens.BottomBarScreens
-import com.example.todoapp.Routes.BottomNavGraph
 import com.example.todoapp.Routes.NavGraph
 import com.example.todoapp.ui.theme.TodoAppTheme
 
@@ -44,11 +46,12 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-
-            val taskViewModel : TaskViewModel = viewModel()
-
             val navController = rememberNavController()
-            var selectedScreen by remember { mutableStateOf(1) }
+            val taskViewModel : TaskViewModel = viewModel()
+            val backStackEntry = navController.currentBackStackEntryAsState().value
+
+//            var selectedScreen by remember { mutableStateOf(1) }
+
 
             val currentRoute = navController.currentDestination?.route
             val showBottomNavigation = currentRoute != BottomBarScreens.AddTask.route
@@ -56,9 +59,11 @@ class MainActivity : ComponentActivity() {
             val screens = listOf(
                 BottomBarScreens.Calendar,
                 BottomBarScreens.Home,
-                BottomBarScreens.Notification
+                BottomBarScreens.QuickListTask
             )
 
+            var stackScreen = backStackEntry?.destination?.route
+            var selectedScreen = backStackEntry?.destination?.route
 
             var isTopBarVisible by remember { mutableStateOf(false) }
 
@@ -81,7 +86,7 @@ class MainActivity : ComponentActivity() {
                             ) {
                                 ProfileHeader(navController){
                                     if(it ==1){
-                                        selectedScreen = 2
+//                                        selectedScreen = 2
                                     }
                                 }
                             }
@@ -101,14 +106,14 @@ class MainActivity : ComponentActivity() {
                                 val icon: ImageVector = when (index) {
                                     0 -> Icons.Filled.CalendarMonth
                                     1 -> Icons.Filled.Home
-                                    2 -> Icons.Filled.Notifications
+                                    2 -> Icons.Filled.Task
                                     else -> Icons.Filled.Home
                                 }
 
                                 BottomNavigationItem(
-                                    selected = selectedScreen == index,
+                                    selected = selectedScreen.equals(item.route),
                                     onClick = {
-                                        selectedScreen = index
+                                        selectedScreen = item.route
                                         navController.navigate(item.route)
 
                                         isTopBarVisible = index != 0
@@ -119,16 +124,18 @@ class MainActivity : ComponentActivity() {
                                             modifier = Modifier
                                                 .size(80.dp)
                                                 .clip(CircleShape)
-                                                .background(if (selectedScreen == index) Color.Black else Color.White),
+                                                .background(if (selectedScreen.equals(item.route)){ Color.Black }else Color.White),
                                             contentAlignment = Alignment.Center
                                         ) {
+
+
                                             Icon(
                                                 imageVector = icon,
                                                 contentDescription = "Screen",
                                                 modifier = Modifier
                                                     .size(50.dp)
                                                     .padding(12.dp),
-                                                tint = if (selectedScreen == index) Color.White else Color.Black
+                                                tint = if (selectedScreen.equals(item.route)) Color.White else Color.Black
                                             )
                                         }
                                     })

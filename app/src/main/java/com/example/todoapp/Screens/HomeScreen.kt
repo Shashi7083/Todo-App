@@ -2,6 +2,11 @@ package com.example.todoapp.Screens
 
 import android.content.Context
 import android.content.Intent
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
@@ -62,6 +67,9 @@ fun Home(
         },
         modifier = modifier
     ) {
+
+
+
         LazyColumn(
             contentPadding = PaddingValues(
                 start = 16.dp,
@@ -82,16 +90,17 @@ fun Home(
             items(db_tasks.value) { task ->
                 TaskView(
                     task = task,
-                    onClick = {task , clickType ->
-                        when(clickType){
-                            ClickType.ViewClick ->{
-                                val intent  = Intent(context,SecondActivity::class.java)
-                                intent.putExtra("details",1)
-                                intent.putExtra("task_data",task)
+                    onClick = { task, clickType ->
+                        when (clickType) {
+                            ClickType.ViewClick -> {
+                                val intent = Intent(context, SecondActivity::class.java)
+                                intent.putExtra("details", 1)
+                                intent.putExtra("task_data", task)
 
                                 context.startActivity(intent)
                             }
-                            ClickType.DeleteClick ->{
+
+                            ClickType.DeleteClick -> {
 
                                 delete.value = true;
                                 deleteTask.value = task
@@ -100,10 +109,12 @@ fun Home(
                             }
                         }
                     }
-                    )
+                )
                 Spacer(modifier = Modifier.height(16.dp))
             }
         }
+
+
     }
 
     if(delete.value){
