@@ -2,6 +2,7 @@ package com.example.todoapp.Screens
 
 import android.app.Activity
 import android.app.Application
+import android.app.TimePickerDialog
 import android.content.Intent
 import android.widget.Toast
 import androidx.compose.foundation.background
@@ -97,6 +98,81 @@ fun TaskDetailScreen(
     window.statusBarColor = LightBlue.toArgb()
 
     var priority by remember { mutableStateOf(1) }
+
+
+    //TIME PICKER IMPLEMENTATION
+
+    val isSystem24Hour = android.text.format.DateFormat.is24HourFormat(context)
+
+    val calendar = java.util.Calendar.getInstance()
+    val hour = calendar[java.util.Calendar.HOUR_OF_DAY]
+    val minute = calendar[java.util.Calendar.MINUTE]
+
+
+    val startTimePicker = TimePickerDialog(
+        context,
+        {_,h:Int, m:Int->
+
+            var hour = h
+            var minute = m
+
+            var amPm = ""
+            if(!isSystem24Hour){
+                if(hour <12){
+                    amPm= " AM"
+
+                }
+                else{
+                    amPm= " PM"
+                    hour -= 12
+                }
+            }else{
+                if(hour < 12){
+                    amPm = " AM"
+                }else{
+                    amPm = " PM"
+                }
+            }
+            var hourStr :String =if(hour/10 <=0)"0$hour" else "$hour"
+            var minuteStr :String =if(minute/10 <=0)"0$minute" else "$minute"
+            startTime = "$hourStr:$minuteStr $amPm"
+
+        },hour,minute,isSystem24Hour
+    )
+    val endTimePicker = TimePickerDialog(
+        context,
+        { _, h: Int, m: Int ->
+
+            var hour = h
+            var minute = m
+
+            var amPm = ""
+            if(!isSystem24Hour){
+                if(hour <12){
+                    amPm= " AM"
+
+                }
+                else{
+                    amPm= " PM"
+                    hour -= 12
+                }
+            }else{
+                if(hour < 12){
+                    amPm = " AM"
+                }else{
+                    amPm = " PM"
+                }
+            }
+            var hourStr :String =if(hour/10 <=0)"0$hour" else "$hour"
+            var minuteStr :String =if(minute/10 <=0)"0$minute" else "$minute"
+            endTime = "$hourStr:$minuteStr $amPm"
+
+
+        },hour,minute,isSystem24Hour
+    )
+
+
+
 
     Column(
         modifier = Modifier
@@ -305,50 +381,74 @@ fun TaskDetailScreen(
 
                         Row {
 
-                        BasicTextField(
-                            value = startTime,
-                            onValueChange = {
-                                if(it.length <=9) {
-                                    startTime = it
-                                }
-                            },
-                            readOnly = !isEdit,
-                            textStyle = TextStyle(
-                                fontWeight = FontWeight.Bold
-                            ),
-                            modifier = Modifier.width(65.dp)
-                                ,
-                            keyboardOptions = KeyboardOptions(
-                                imeAction = ImeAction.Done
-                            ),
-                            keyboardActions = KeyboardActions(
-                                onDone = {
-                                    keyboardController?.hide()
-                                }
+//                        BasicTextField(
+//                            value = startTime,
+//                            onValueChange = {
+//                                if(it.length <=9) {
+//                                    startTime = it
+//                                }
+//                            },
+//                            readOnly = !isEdit,
+//                            textStyle = TextStyle(
+//                                fontWeight = FontWeight.Bold
+//                            ),
+//                            modifier = Modifier.width(65.dp)
+//                                ,
+//                            keyboardOptions = KeyboardOptions(
+//                                imeAction = ImeAction.Done
+//                            ),
+//                            keyboardActions = KeyboardActions(
+//                                onDone = {
+//                                    keyboardController?.hide()
+//                                }
+//                            )
+//                        )
+
+                            Text(
+                                text = startTime,
+                                fontWeight = FontWeight.Bold,
+                                modifier = Modifier.width(65.dp)
+                                    .clickable {
+                                               if(isEdit){
+                                                    startTimePicker.show()
+                                               }
+                                    },
                             )
-                        )
+
+
                         Text(text = "-")
-                            BasicTextField(
-                                value = endTime,
-                                onValueChange = {
-                                    if(it.length <=9) {
-                                        endTime = it
-                                    }
-                                },
-                                readOnly = !isEdit,
-                                textStyle = TextStyle(
-                                    fontWeight = FontWeight.Bold
-                                ),
-                                modifier = Modifier.width(65.dp),
-                                maxLines = 1,
-                                keyboardOptions = KeyboardOptions(
-                                    imeAction = ImeAction.Done
-                                ),
-                                keyboardActions = KeyboardActions(
-                                    onDone = {
-                                        keyboardController?.hide()
-                                    }
-                                )
+//                            BasicTextField(
+//                                value = endTime,
+//                                onValueChange = {
+//                                    if(it.length <=9) {
+//                                        endTime = it
+//                                    }
+//                                },
+//                                readOnly = !isEdit,
+//                                textStyle = TextStyle(
+//                                    fontWeight = FontWeight.Bold
+//                                ),
+//                                modifier = Modifier.width(65.dp),
+//                                maxLines = 1,
+//                                keyboardOptions = KeyboardOptions(
+//                                    imeAction = ImeAction.Done
+//                                ),
+//                                keyboardActions = KeyboardActions(
+//                                    onDone = {
+//                                        keyboardController?.hide()
+//                                    }
+//                                )
+//                            )
+
+                            Text(
+                                text = endTime,
+                                fontWeight = FontWeight.Bold,
+                                modifier = Modifier.width(65.dp)
+                                    .clickable {
+                                        if(isEdit){
+                                            endTimePicker.show()
+                                        }
+                                    },
                             )
                     }
                     }
