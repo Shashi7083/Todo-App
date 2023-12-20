@@ -64,14 +64,14 @@ dependencies {
     implementation("androidx.compose.material:material:1.1.1")
     implementation("androidx.navigation:navigation-compose:2.4.1")
 
+    //Datastore preferences
+    implementation("androidx.datastore:datastore-preferences:1.0.0")
 
-//    implementation("androidx.room:room-ktx:2.6.0")
-//    kapt("androidx.room:room-compiler:2.6.0")
-//
-//    implementation("io.github.boguszpawlowski.composecalendar:composecalendar:1.1.0")
-//
-//    // separate artifact with utilities for working with kotlinx-datetime
-//    implementation("io.github.boguszpawlowski.composecalendar:kotlinx-datetime:1.1.0")
+//compose calendar
+    implementation("io.github.boguszpawlowski.composecalendar:composecalendar:1.1.0")
+    // separate artifact with utilities for working with kotlinx-datetime
+    implementation("io.github.boguszpawlowski.composecalendar:kotlinx-datetime:1.1.0")
+
 
     implementation("com.himanshoe:kalendar:1.3.2")
     implementation("com.himanshoe:kalendar-endlos:1.3.2")
@@ -79,7 +79,6 @@ dependencies {
 
 
     implementation("androidx.room:room-runtime:2.5.0")
-    implementation(platform("androidx.compose:compose-bom:2023.03.00"))
     androidTestImplementation(platform("androidx.compose:compose-bom:2023.03.00"))
 
     kapt("androidx.room:room-compiler:2.5.0")
@@ -89,10 +88,10 @@ dependencies {
     testImplementation("androidx.room:room-testing:2.5.0")
 
 
+    implementation("com.himanshoe:kalendar:1.3.2")
+    implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.5.0")
+
     //koin
-
-   
-
     implementation("io.insert-koin:koin-android:3.4.0")
     implementation("io.insert-koin:koin-androidx-compose:3.4.4")
 

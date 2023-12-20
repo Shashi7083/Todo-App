@@ -67,7 +67,9 @@ import androidx.compose.material.icons.filled.CheckBox
 import androidx.compose.material.icons.filled.CheckBoxOutlineBlank
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontFamily
 import com.example.todoapp.R
+import com.example.todoapp.ui.theme.LightGray
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -243,7 +245,7 @@ fun QuickListTaskScreen(
                 ) {
 
                     item {
-                        WelcomeMessage()
+                       TopMessage()
                     }
 
                     items(todos.sortedBy { it.done }, key = {
@@ -388,4 +390,26 @@ fun LazyItemScope.TodoItem(todo: TodoEntity, onClick: () -> Unit, onDelete: () -
 
     }
 
+}
+
+@Composable
+fun TopMessage(){
+    Column(
+        verticalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        Text(
+            text = "Hi Shashi! 👋",
+            fontFamily = FontFamily.SansSerif,
+            fontWeight = FontWeight.Bold,
+            fontSize = 22.sp
+        )
+
+        Text(
+            text = "Complete your Quick List tasks.",
+            fontFamily = FontFamily.Default,
+            fontWeight = FontWeight.Normal,
+            fontSize = 18.sp,
+            color = LightGray
+        )
+    }
 }

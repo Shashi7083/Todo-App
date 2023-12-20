@@ -78,9 +78,7 @@ fun Home(
             ),
             modifier = Modifier.padding(it)
         ) {
-//            item {
-//                ProfileHeader()
-//            }
+
             item {
 //                Spacer(modifier = Modifier.height(30.dp))
                 WelcomeMessage()

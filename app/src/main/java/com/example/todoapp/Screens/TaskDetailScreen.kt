@@ -316,7 +316,8 @@ fun TaskDetailScreen(
                             textStyle = TextStyle(
                                 fontWeight = FontWeight.Bold
                             ),
-                            modifier = Modifier.width(65.dp),
+                            modifier = Modifier.width(65.dp)
+                                ,
                             keyboardOptions = KeyboardOptions(
                                 imeAction = ImeAction.Done
                             ),
@@ -354,13 +355,6 @@ fun TaskDetailScreen(
 
                 }
 
-
-//            Box(
-//                modifier = Modifier
-//                    .width(20.dp)
-//                    .fillMaxHeight(0.1f)
-//                    .background(LightBlue, RoundedCornerShape( bottomStart = 100.dp))
-//            )
 
                 Divider(
                     modifier = Modifier
@@ -508,6 +502,8 @@ fun TaskDetailScreen(
                                 month  = month,
                                 year = year
                             )
+
+                        isEdit = !isEdit
 
                         taskViewModel.updateTask(updatedTask)
                         Toast.makeText(context, "Task Updated", Toast.LENGTH_SHORT).show()

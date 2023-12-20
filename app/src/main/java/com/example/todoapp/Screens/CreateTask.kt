@@ -586,7 +586,7 @@ fun CreateTask(
                     ) {
 
                         Text(
-                            text = "Midium",
+                            text = "Medium",
                             fontSize = 18.sp,
                             color = Orange,
                             modifier = Modifier.padding(25.dp, 15.dp, 25.dp, 15.dp)
@@ -653,6 +653,8 @@ fun CreateTask(
                             }else{
                                 Toast.makeText(context, "Field Cannot be Empty", Toast.LENGTH_SHORT).show()
                             }
+
+                            context.startActivity(Intent(context,MainActivity::class.java))
 
                         },
                         colors = ButtonDefaults.buttonColors()
