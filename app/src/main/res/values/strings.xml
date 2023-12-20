@@ -2,4 +2,10 @@
     <string name="app_name">Todo App</string>
     <string name="title_activity_second">SecondActivity</string>
     <string name="title_activity_setting">SettingActivity</string>
+
+    <string name="about_app">
+         Welcome to Todo App , where productivity meets simplicity. We
+         believe in making your life easier by helping you stay organized,
+         focused, and in control of your tasks.
+    </string>
 </resources>

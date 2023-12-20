@@ -31,4 +31,8 @@ val priority2 = Color(0xFF1A5026)
 
 val Dark200 = Color(0xff44475a)
 val Dark500 = Color(0xff2d2f3c)
+val TextHeading = Color(0xff262729)
+val TextBody =  Color(0xff3C3F46)
+
+val TextSubHeading = Color(0xffEB4B88)
 
