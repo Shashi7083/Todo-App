@@ -58,6 +58,8 @@ import io.github.boguszpawlowski.composecalendar.header.MonthState
 import io.github.boguszpawlowski.composecalendar.rememberSelectableCalendarState
 import io.github.boguszpawlowski.composecalendar.selection.SelectionMode
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import java.time.LocalDate
 import java.time.YearMonth
 import java.time.format.DateTimeFormatter
@@ -116,13 +118,12 @@ fun Calendar(
 
     var monthNo = getMonthNumber(Month.toString())
 
-// if you remove this monthNo not equals to tasks.month  (i don't know)
+    // if you remove this monthNo not equals to tasks.month  (i don't know)
     Log.d("Log","${monthNo}")
 
     val filteredTaskList = taskList.value.filter { tasks ->
          monthNo.equals(tasks.month)&& tasks.year.equals(Year.toString())
     }
-
 
 
 
