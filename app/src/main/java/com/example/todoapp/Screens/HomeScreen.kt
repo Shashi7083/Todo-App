@@ -2,11 +2,7 @@ package com.example.todoapp.Screens
 
 import android.content.Context
 import android.content.Intent
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.scaleIn
-import androidx.compose.animation.scaleOut
+import android.util.Log
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
@@ -25,8 +21,10 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
@@ -41,25 +39,45 @@ import com.example.todoapp.Model.tasks
 import com.example.todoapp.R
 import com.example.todoapp.RoomDatabase.TaskViewModel
 import com.example.todoapp.SecondActivity
+import com.example.todoapp.viewModels.SharedDataViewModel
+
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Home(
-    modifier : Modifier,
-    navController : NavHostController,
-    taskViewModel: TaskViewModel
+    modifier: Modifier,
+    navController: NavHostController,
+    taskViewModel: TaskViewModel,
+   sharedDataViewModel: SharedDataViewModel
 ){
     val db_tasks = taskViewModel.tasks.collectAsState(emptyList())
-//    Log.d("test","${db_tasks.value} \n\n\n")
-//    Log.d("test", "$taskList \n\n\n")
+
+    var selectedPriority = sharedDataViewModel.selectedPriority
+
+
     var delete = remember{ mutableStateOf(false) }
     var deleteTask = remember{ mutableStateOf(taskList.get(0)) }
 
-
-
     var addTask = remember { mutableStateOf(false) }
     val context = LocalContext.current
+
+    var filteredTask by remember {
+        mutableStateOf(
+            emptyList<tasks>()
+        )
+    }
+
+    if(selectedPriority.value ==3){
+        filteredTask = db_tasks.value
+    }else{
+        filteredTask = db_tasks.value.filter { tasks ->
+            tasks.priority ==selectedPriority.value
+        }
+    }
+
+    Log.d("check",selectedPriority.value.toString())
+
 
     Scaffold(
         floatingActionButton = {
@@ -85,7 +103,7 @@ fun Home(
                 Spacer(modifier = Modifier.height(30.dp))
             }
 
-            items(db_tasks.value) { task ->
+            items(filteredTask) { task ->
                 TaskView(
                     task = task,
                     onClick = { task, clickType ->

@@ -11,12 +11,14 @@ import com.example.todoapp.Screens.BottomBarScreens
 import com.example.todoapp.Screens.Calendar
 import com.example.todoapp.Screens.Home
 import com.example.todoapp.Screens.QuickListTaskScreen
+import com.example.todoapp.viewModels.SharedDataViewModel
 
 
 fun NavGraphBuilder.BottomNavGraph(
     navController: NavHostController,
     modifier: Modifier,
-    taskViewModel: TaskViewModel
+    taskViewModel: TaskViewModel,
+    sharedDataViewModel: SharedDataViewModel
 ) {
 
 //    NavHost(
@@ -32,7 +34,7 @@ fun NavGraphBuilder.BottomNavGraph(
         composable(
             route = BottomBarScreens.Home.route
         ){
-            Home(modifier = modifier, navController = navController,taskViewModel)
+            Home(modifier = modifier, navController = navController,taskViewModel, sharedDataViewModel)
         }
 
         composable(

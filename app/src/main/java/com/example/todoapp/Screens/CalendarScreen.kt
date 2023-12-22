@@ -79,18 +79,18 @@ fun Calendar(
 
     val dateFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
 
-    val datesList: List<LocalDate> = taskList.value.map { task ->
-        LocalDate.parse("${task.date}-${task.month}-${task.year}", dateFormatter)
-    }
+//    val datesList: List<LocalDate> = taskList.value.map { task ->
+//        //LocalDate.parse("${task.date}-${task.month}-${task.year}", dateFormatter)
+//    }
 
-    Log.d("Log",datesList.toString())
+//    Log.d("Log",datesList.toString())
 
 
 
 
     val calendarState = rememberSelectableCalendarState(
         initialMonth = initialMonth,
-        initialSelection = datesList,
+        //initialSelection = datesList,
         initialSelectionMode = SelectionMode.Multiple,
         confirmSelectionChange = { false }
     )

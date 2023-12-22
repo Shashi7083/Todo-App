@@ -7,6 +7,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -53,13 +54,20 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.example.todoapp.MainActivity
 import com.example.todoapp.R
+import com.example.todoapp.Routes.settingScreenRoute.SettingScreens
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SettingScreen() {
+fun SettingScreen(
+    navController: NavController
+) {
+
+    val interactionSource = remember { MutableInteractionSource() }
+
 
     val context = LocalContext.current
     var Notificationchecked by remember { mutableStateOf(true) }
@@ -84,7 +92,10 @@ fun SettingScreen() {
                     imageVector = Icons.Filled.ArrowBack,
                     contentDescription = "Back",
                     modifier = Modifier
-                        .clickable {
+                        .clickable(
+                            interactionSource = interactionSource,
+                            indication = null
+                        )  {
                             context.startActivity(Intent(context, MainActivity::class.java))
                         }
                 )
@@ -178,27 +189,6 @@ fun SettingScreen() {
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceBetween,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 5.dp)
-                ) {
-                    Text(
-                        text = "Push Notification",
-                        fontSize = 18.sp
-                    )
-
-                    Switch(
-                        checked = Notificationchecked,
-                        onCheckedChange = {
-                            Notificationchecked = it
-                        },
-                        modifier = Modifier.scale(0.8f)
-                    )
-                }
-
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceBetween,
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Text(
@@ -221,7 +211,10 @@ fun SettingScreen() {
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(top = 10.dp)
-                        .clickable {
+                        .clickable (
+                            interactionSource = interactionSource,
+                            indication = null
+                        ) {
                             Toast
                                 .makeText(context, "no updates available", Toast.LENGTH_SHORT)
                                 .show()
@@ -246,7 +239,10 @@ fun SettingScreen() {
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(top = 25.dp)
-                        .clickable {
+                        .clickable (
+                            interactionSource = interactionSource,
+                            indication = null
+                        ) {
 
                         }
                 ) {
@@ -268,12 +264,15 @@ fun SettingScreen() {
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(top = 25.dp)
-                        .clickable {
-
+                        .clickable(
+                            interactionSource = interactionSource,
+                            indication = null
+                        )  {
+                            navController.navigate(SettingScreens.HelpScreen.route)
                         }
                 ) {
                     Text(
-                        text = "Privacy policy",
+                        text = "Help",
                         fontSize = 18.sp
                     )
 
@@ -284,37 +283,10 @@ fun SettingScreen() {
 
                 }
 
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 25.dp)
-                        .clickable {
 
-                        }
-                ) {
-                    Text(
-                        text = "Terms and conditions",
-                        fontSize = 18.sp
-                    )
-
-                    Icon(
-                        imageVector = Icons.Filled.KeyboardArrowRight,
-                        contentDescription = "arrow"
-                    )
-
-                }
             }
         }
     }
 
 }
-
-@Preview(showBackground = true, showSystemUi = true)
-@Composable
-fun preview() {
-    SettingScreen()
-}
-
 

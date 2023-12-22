@@ -1,7 +1,6 @@
 package com.example.todoapp
 
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
@@ -17,7 +16,6 @@ import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CalendarMonth
 import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.Task
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -32,6 +30,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
@@ -40,14 +39,18 @@ import com.example.todoapp.RoomDatabase.TaskViewModel
 import com.example.todoapp.Screens.BottomBarScreens
 import com.example.todoapp.Routes.NavGraph
 import com.example.todoapp.ui.theme.TodoAppTheme
+import com.example.todoapp.viewModels.SharedDataViewModel
 
 class MainActivity : ComponentActivity() {
     @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
+
+            var selectedPriority by remember{ mutableStateOf(3) }
             val navController = rememberNavController()
             val taskViewModel : TaskViewModel = viewModel()
+            val sharedDataViewModel : SharedDataViewModel = viewModel()
             val backStackEntry = navController.currentBackStackEntryAsState().value
 
 //            var selectedScreen by remember { mutableStateOf(1) }
@@ -84,11 +87,7 @@ class MainActivity : ComponentActivity() {
                                     bottom = 4.dp
                                 )
                             ) {
-                                ProfileHeader(navController){
-                                    if(it ==1){
-//                                        selectedScreen = 2
-                                    }
-                                }
+                                ProfileHeader(navController,sharedDataViewModel)
                             }
 
                         }
@@ -124,7 +123,11 @@ class MainActivity : ComponentActivity() {
                                             modifier = Modifier
                                                 .size(80.dp)
                                                 .clip(CircleShape)
-                                                .background(if (selectedScreen.equals(item.route)){ Color.Black }else Color.White),
+                                                .background(
+                                                    if (selectedScreen.equals(item.route)) {
+                                                        Color.Black
+                                                    } else Color.White
+                                                ),
                                             contentAlignment = Alignment.Center
                                         ) {
 
@@ -146,7 +149,7 @@ class MainActivity : ComponentActivity() {
                 ) {
 //                    BottomNavGraph(
 //                        navController = navController, modifier = Modifier.padding(it))
-                    NavGraph(navController = navController, modifier = Modifier.padding(it),taskViewModel)
+                    NavGraph(navController = navController, modifier = Modifier.padding(it),taskViewModel, sharedDataViewModel)
                 }
 
             }
