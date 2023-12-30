@@ -113,7 +113,11 @@ class MainActivity : ComponentActivity() {
                                     selected = selectedScreen.equals(item.route),
                                     onClick = {
                                         selectedScreen = item.route
-                                        navController.navigate(item.route)
+                                        navController.navigate(item.route) {
+                                            popUpTo(item.route) {
+                                            inclusive = true
+                                        }
+                                        }
 
                                         isTopBarVisible = index != 0
 

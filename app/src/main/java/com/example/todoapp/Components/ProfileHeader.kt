@@ -51,7 +51,7 @@ fun ProfileHeader(
     var showMenu by remember { mutableStateOf(false) }
     var priority = sharedDataViewModel.selectedPriority
     var color =
-            when (priority.value) {
+            when (priority) {
                 3 -> Color.Black
                 2 -> Color.Green
                 1 -> Orange 
@@ -93,6 +93,14 @@ fun ProfileHeader(
                 expanded = showMenu,
                 onDismissRequest = { showMenu = false }) {
 
+
+                DropdownMenuItem(onClick = {
+                    sharedDataViewModel.setSelectedPriority(3)
+                    showMenu = !showMenu
+                }) {
+                    Text(text = "All")
+                }
+
                 DropdownMenuItem(onClick = {
                     sharedDataViewModel.setSelectedPriority(0)
                     showMenu = !showMenu
@@ -111,12 +119,7 @@ fun ProfileHeader(
                 }) {
                     Text(text = "Low", color = Color.Green)
                 }
-                DropdownMenuItem(onClick = {
-                    sharedDataViewModel.setSelectedPriority(3)
-                    showMenu = !showMenu
-                }) {
-                    Text(text = "All")
-                }
+
 
             }
 

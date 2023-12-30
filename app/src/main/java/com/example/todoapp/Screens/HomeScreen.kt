@@ -52,6 +52,7 @@ fun Home(
    sharedDataViewModel: SharedDataViewModel
 ){
     val db_tasks = taskViewModel.tasks.collectAsState(emptyList())
+    val dbTasks by remember { mutableStateOf(db_tasks.value.reversed()) }
 
     var selectedPriority = sharedDataViewModel.selectedPriority
 
@@ -64,19 +65,27 @@ fun Home(
 
     var filteredTask by remember {
         mutableStateOf(
-            emptyList<tasks>()
+           db_tasks.value
         )
     }
 
-    if(selectedPriority.value ==3){
-        filteredTask = db_tasks.value
+
+
+
+    if(selectedPriority ==3){
+        filteredTask = db_tasks.value.reversed()
+
+
     }else{
         filteredTask = db_tasks.value.filter { tasks ->
-            tasks.priority ==selectedPriority.value
+            tasks.priority ==selectedPriority
         }
+
     }
 
-    Log.d("check",selectedPriority.value.toString())
+
+
+    Log.d("check",selectedPriority.toString())
 
 
     Scaffold(

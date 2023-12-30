@@ -19,8 +19,10 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -38,6 +40,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -61,6 +64,8 @@ import com.example.todoapp.ui.theme.gray
 import com.example.todoapp.ui.theme.redOrange
 
 import com.example.todoapp.ui.theme.unselectedDate
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -693,12 +698,33 @@ fun CalendarListView(
     selectedItem: CalendarDateModel,
     selectedItemDetails: (CalendarDateModel) -> Unit
 ) {
+    val context = LocalContext.current
+    val lazyListState = rememberLazyListState()
+    var scope = rememberCoroutineScope()
+    var selectedIndex by remember {
+        mutableStateOf(selectedItem.calendarDate.toInt())
+    }
+
+    var initialState by remember { mutableStateOf(selectedItem) }
+
+    var currentDate by remember { mutableStateOf(true) }
+
+
+
     LazyRow(
+        state = lazyListState,
         modifier = Modifier
             .fillMaxWidth()
             .padding(0.dp, 0.dp, 0.dp, 5.dp)
     ) {
-        items(calendarList, key = {it.data}) {
+        itemsIndexed(calendarList) {index, it->
+
+            if(initialState.data.month == it.data.month){
+                currentDate = true
+            }else{
+                currentDate = false
+            }
+
             dateList(
                 date = it,
                 selectedItem = selectedItem,
@@ -708,7 +734,24 @@ fun CalendarListView(
 
         }
     }
+
+
+   LaunchedEffect(selectedItem){
+       delay(10)
+       coroutineScope {
+           launch {
+
+               if(selectedIndex != -1 && currentDate){
+                   lazyListState.animateScrollToItem(selectedIndex)
+               }
+
+           }
+       }
+   }
+
 }
+
+
 
 @Composable
 fun dateList(

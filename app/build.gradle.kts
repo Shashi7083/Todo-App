@@ -67,7 +67,7 @@ dependencies {
     //Datastore preferences
     implementation("androidx.datastore:datastore-preferences:1.0.0")
 
-
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.2")
 
 //compose calendar
     implementation("io.github.boguszpawlowski.composecalendar:composecalendar:1.1.0")
