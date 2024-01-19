@@ -2,7 +2,7 @@
 
 You can add task easily , pick date and add  timing (from-to)
 
-| Home Page |
+# Home Page
 <img src="https://github.com/Shashi7083/Todo-App/assets/88765330/24244deb-91b1-447b-82e4-f2eb485f8ec6" width="200" height="400" style="margin-right: 60px;">
 | Calendar Page |
 <img src="https://github.com/Shashi7083/Todo-App/assets/88765330/93177dbc-3126-4b99-9daf-f2458c40133e" width="200" height="400" style="margin-right: 60px;">
