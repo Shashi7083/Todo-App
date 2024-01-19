@@ -22,7 +22,3 @@ You can add task easily , pick date and add  timing (from-to)
   <img src="https://github.com/Shashi7083/Todo-App/assets/88765330/17b318f7-c3d4-4bc3-bfd5-fa0bdaee1a02" width="200" height="400" style="margin-right: 60px;">
 </div>
 
-# Sort by Priority
-<div style="text-align: center;">
-  <img src="https://github.com/Shashi7083/Todo-App/assets/88765330/142c30ed-c0e1-4f6b-bd1c-c15692289459" width="200" height="400" style="
-
