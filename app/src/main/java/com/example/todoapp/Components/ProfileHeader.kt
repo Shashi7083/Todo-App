@@ -126,31 +126,31 @@ fun ProfileHeader(
 
 
             Spacer(modifier = Modifier.width(8.dp))
-            BadgedBox(
-                badge = {
-//                Badge(
-//                    containerColor = Orange,
-//                    contentColor = Color.White,
-//                    modifier = Modifier.offset(y = 6.dp,x = -9.dp)  // Taking this badge down by 7 dp
-//
-//                )
-                },
-                modifier = Modifier.padding(16.dp)
-            ) {
-                Icon(
-                    imageVector = Icons.Filled.Settings,
-                    contentDescription = "Notification",
-                    modifier = Modifier
-                        .clickable {
-//                        navController.navigate(BottomBarScreens.Notification.route){
-//                            popUpTo(BottomBarScreens.Notification.route){
-//                                inclusive = true
-//                            }
+//            BadgedBox(
+//                badge = {
+////                Badge(
+////                    containerColor = Orange,
+////                    contentColor = Color.White,
+////                    modifier = Modifier.offset(y = 6.dp,x = -9.dp)  // Taking this badge down by 7 dp
+////
+////                )
+//                },
+//                modifier = Modifier.padding(16.dp)
+//            ) {
+//                Icon(
+//                    imageVector = Icons.Filled.Settings,
+//                    contentDescription = "Notification",
+//                    modifier = Modifier
+//                        .clickable {
+////                        navController.navigate(BottomBarScreens.Notification.route){
+////                            popUpTo(BottomBarScreens.Notification.route){
+////                                inclusive = true
+////                            }
+////                        }
+//                            context.startActivity(Intent(context, SettingActivity::class.java))
 //                        }
-                            context.startActivity(Intent(context, SettingActivity::class.java))
-                        }
-                )
-            }
+//                )
+//            }
         }
 
 

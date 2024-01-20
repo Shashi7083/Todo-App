@@ -43,7 +43,7 @@ fun WelcomeMessage() {
         verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
         Text(
-            text = "Hi Shashi! 👋",
+            text = "Hi User! 👋",
             fontFamily = FontFamily.SansSerif,
             fontWeight = FontWeight.Bold,
             fontSize = 22.sp
